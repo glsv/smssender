@@ -56,7 +56,7 @@ class BootstrapComponent implements BootstrapInterface
 'bootstrap' => [\common\components\BootstrapComponent::class],
 ```
 
-### <a name="setup3"></a> 3. Миграции
+#### <a name="setup3"></a> 3. Миграции
 Добавить миграции через _migrationNamespaces_ в _controllerMap_
 ```
 'controllerMap' => [
