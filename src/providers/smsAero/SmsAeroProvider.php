@@ -146,7 +146,7 @@ class SmsAeroProvider implements SmsProviderInterface
         $this->validateResponse($response);
 
         if (!$response['success']) {
-            throw new ValidateResponseException('Ошибка запроса баланса.');
+            throw new ValidateResponseException('Ошибка запроса баланса: ' . $response['message']);
         }
 
         if (!isset($response['data']['balance'])) {
