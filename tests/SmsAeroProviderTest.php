@@ -34,7 +34,8 @@ class SmsAeroProviderTest extends TestCase
 
     public function testGetBalance()
     {
-        $this->provider->getBalance();
+        $value = $this->provider->getBalance();
+        $this->assertTrue(is_float($value));
     }
 
     public function testSend()
