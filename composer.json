@@ -22,7 +22,8 @@
     "require": {
         "ext-json": "*",
         "ext-mbstring": "*",
-        "yiisoft/yii2": "~2.0.0"
+        "yiisoft/yii2": "~2.0.0",
+        "33evgenyy33/yii2-smsaerov2": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
