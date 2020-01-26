@@ -36,7 +36,7 @@ class UpdateStatusAction extends BaseSmsSenderAction
             $model = $this->service->get($id);
             $response = $this->sender->getInfoMessage($model->message_id);
 
-            $model->setDataFromSendResponse($response);
+            $model->initBySendResponse($response);
             $this->service->save($model);
 
             \Yii::$app->session->addFlash('success', 'Лог сообщения обновлен.');
