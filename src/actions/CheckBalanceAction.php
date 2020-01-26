@@ -22,7 +22,10 @@ class CheckBalanceAction extends BaseSmsSenderAction
     {
         try {
             $balance = $this->sender->getBalance();
-            \Yii::$app->session->addFlash('success', 'Баланс ' . $this->sender->getCurrentProviderKey() . ': ' . $balance);
+            \Yii::$app->session->addFlash(
+                'success',
+                \Yii::t('sms-sender/app', 'Balance') . ': ' . $this->sender->getCurrentProviderKey() . ': ' . $balance
+            );
         } catch (SmsSenderException $exc) {
             \Yii::$app->errorHandler->logException($exc);
             \Yii::$app->session->addFlash('error', $exc->getMessage());

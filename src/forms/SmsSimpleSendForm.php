@@ -5,6 +5,7 @@ namespace glsv\smssender\forms;
 use glsv\smssender\interfaces\SmsFormInterface;
 use glsv\smssender\models\Recipient;
 use yii\base\Model;
+use Yii;
 
 class SmsSimpleSendForm extends Model implements SmsFormInterface
 {
@@ -38,18 +39,18 @@ class SmsSimpleSendForm extends Model implements SmsFormInterface
     public function attributeLabels()
     {
         return [
-            'number' => 'Телефон',
-            'message' => 'Сообщение',
-            'recipient_id' => 'ID получателя',
-            'recipient_name' => 'Имя получателя',
+            'number' => Yii::t('sms-sender/app', 'phone'),
+            'message' => Yii::t('sms-sender/app', 'message'),
+            'recipient_id' => Yii::t('sms-sender/app', 'recipient_id'),
+            'recipient_name' => Yii::t('sms-sender/app', 'recipient'),
         ];
     }
 
     public function attributeHints()
     {
         return [
-            'number' => '11 цифр',
-            'recipient_id' => 'ID в учетной системе',
+            'number' => Yii::t('sms-sender/app', '11 digits'),
+            'recipient_id' => Yii::t('sms-sender/app', 'ID in the accounting system'),
         ];
     }
 

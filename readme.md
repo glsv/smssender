@@ -6,11 +6,16 @@
 * Необходим интерфейс просмотра логов отправки
 * Требуется независимость от конкретного sms-провайдера   
 
+## Установка
+```
+composer require glsv/yii2-smssender "*"
+```
+
 ## Использование
 ```
 $smsSender->send($phone, $message, SendMethod::METHOD_MANUAL);
 ```
-Сообщение будет отправлено через подключенный SMS-провайдер, а результат отправке залогирован.
+Сообщение будет отправлено через подключенный SMS-провайдер, а результат отправки (успешный или нет) залогирован.
 
 ## Настройка
 1. [Конфигурация sms-провайдера](#setup1)
@@ -43,6 +48,8 @@ class BootstrapComponent implements BootstrapInterface
 {
     public function bootstrap($app)
     {
+        $container = \Yii::$container;
+
         $config = \Yii::$app->params['smsAeroProvider'];
 
         $container->set(SmsProviderInterface::class, SmsAeroProvider::class, [$config]);

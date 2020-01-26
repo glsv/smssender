@@ -3,6 +3,7 @@
 namespace glsv\smssender\vo;
 
 use glsv\smssender\interfaces\MessageStatusInterface;
+use Yii;
 
 class MessageStatus implements MessageStatusInterface
 {
@@ -16,14 +17,14 @@ class MessageStatus implements MessageStatusInterface
     CONST STATUS_DEBUG = 'debug';
 
     public static $statuses = [
-        self::STATUS_QUEUED => 'В очереди',
-        self::STATUS_SENDING => 'Доставляется',
-        self::STATUS_DELIVERED => 'Доставлено',
-        self::STATUS_FAILED => 'Ошибка',
-        self::STATUS_REJECTED => 'Отклонено',
-        self::STATUS_MODERATION => 'На модерации',
-        self::STATUS_UNDEFINED => 'Не определен',
-        self::STATUS_DEBUG => 'Debug',
+        self::STATUS_QUEUED => 'queued',
+        self::STATUS_SENDING => 'sending',
+        self::STATUS_DELIVERED => 'delivered',
+        self::STATUS_FAILED => 'failed',
+        self::STATUS_REJECTED => 'rejected',
+        self::STATUS_MODERATION => 'moderation',
+        self::STATUS_UNDEFINED => 'undefined',
+        self::STATUS_DEBUG => 'debug',
     ];
 
     private $status;
@@ -47,6 +48,6 @@ class MessageStatus implements MessageStatusInterface
      */
     public function getLabel()
     {
-        return self::$statuses[$this->status];
+        return Yii::t('sms-sender/statuses', self::$statuses[$this->status]);
     }
 }

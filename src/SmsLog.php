@@ -31,9 +31,13 @@ use glsv\smssender\vo\MessageStatus;
  */
 class SmsLog extends ActiveRecord
 {
+    private $max_length_message = 255;
+    private $max_length_recipient = 255;
+    private $max_length_response = 1024;
+
     public static function tableName()
     {
-        return 'sms_log';
+        return '{{%sms_log}}';
     }
 
     public function rules()
@@ -42,13 +46,14 @@ class SmsLog extends ActiveRecord
             [['phone', 'message', 'method', 'operation_status', 'provider_key'], 'required'],
             [['message_id'], 'integer'],
             [['phone'], 'string', 'max' => 11, 'min' => 11],
-            [['message', 'recipient_name'], 'string', 'max' => 255],
+            [['message'], 'string', 'max' => $this->max_length_message],
+            [['recipient_name'], 'string', 'max' => $this->max_length_recipient],
             [['recipient_id'], 'string', 'max' => 36],
             [['method'], 'in', 'range' => SendMethod::$methods],
             [['operation_status'], 'in', 'range' => array_keys(OperationStatus::$statuses)],
             [['message_status'], 'in', 'range' => array_keys(MessageStatus::$statuses)],
             [['provider_message_status'], 'string', 'max' => 50],
-            [['last_response'], 'string', 'max' => 512],
+            [['last_response'], 'string', 'max' => $this->max_length_response],
             [['delivery_date'], 'date', 'format' => 'php:Y-m-d H:i:s']
         ];
     }
@@ -69,37 +74,18 @@ class SmsLog extends ActiveRecord
         }
 
         if ($this->last_response) {
-            $this->last_response = mb_substr($this->last_response, 0, 512);
+            $this->last_response = mb_substr($this->last_response, 0, $this->max_length_response);
         }
 
         if ($this->recipient_name) {
-            $this->recipient_name = mb_substr($this->recipient_name, 0, 255);
+            $this->recipient_name = mb_substr($this->recipient_name, 0, $this->max_length_recipient);
         }
 
         if ($this->message) {
-            $this->message = mb_substr($this->message, 0, 255);
+            $this->message = mb_substr($this->message, 0, $this->max_length_message);
         }
 
         return true;
-    }
-
-    public function attributeLabels()
-    {
-        return array(
-            'id' => 'ID',
-            'phone' => 'Номер телефона',
-            'message' => 'Сообщение',
-            'recipient_id' => 'ID получателя',
-            'recipient_name' => 'Имя получателя',
-            'method' => 'Метод отправки',
-            'provider_key' => 'ID провайдера',
-            'message_id' => 'ID сообщения у провайдера',
-            'last_response' => 'Последний ответ',
-            'operation_status' => 'Статус операции',
-            'message_status' => 'Статус сообщения',
-            'provider_message_status' => 'Статус сообщения провайдера',
-            'delivery_date' => 'Дата доставки',
-        );
     }
 
     /**
@@ -126,11 +112,17 @@ class SmsLog extends ActiveRecord
         return $this->operation_status === OperationStatus::STATUS_DEBUG;
     }
 
+    /**
+     * @return bool
+     */
     public function isDelivered()
     {
         return $this->message_status === MessageStatus::STATUS_DELIVERED;
     }
 
+    /**
+     * @return bool
+     */
     public function isFailed()
     {
         return
@@ -140,13 +132,13 @@ class SmsLog extends ActiveRecord
 
     public function __toString()
     {
-        return 'SMS на ' . $this->phone . ' от ' . date('d.m.Y', $this->created_at);
+        return 'SMS to ' . $this->phone . ' (' . date('d.m.Y', $this->created_at) .')';
     }
 
     /**
      * Установить статус сообщения (и общего MessageStatus и от провайдера)
-     * @param $message_status
-     * @param null|string $provider_status
+     * @param string $message_status
+     * @param string|null $provider_status
      */
     public function setMessageStatus($message_status, $provider_status = null)
     {
@@ -159,26 +151,10 @@ class SmsLog extends ActiveRecord
         }
     }
 
-    public function delivery($delivery_timestamp = null)
-    {
-        if (!is_int($delivery_timestamp)) {
-            throw new \InvalidArgumentException('delivery_timestamp должен быть в формате timestamp: ' . $delivery_timestamp);
-        }
-
-        $this->operation_status = OperationStatus::STATUS_SUCCESS;
-        $this->message_status = MessageStatus::STATUS_DELIVERED;
-
-        if (!$delivery_timestamp) {
-            $delivery_timestamp = time();
-        }
-
-        $this->delivery_date = date('Y-m-d H:i:s', $delivery_timestamp);
-    }
-
     /**
      * @param SendResponseInterface $response
      */
-    public function setDataFromSendResponse(SendResponseInterface $response)
+    public function initBySendResponse(SendResponseInterface $response)
     {
         $this->message_status = $response->getMessageStatus();
         $this->provider_message_status = $response->getProviderStatus();
@@ -187,6 +163,9 @@ class SmsLog extends ActiveRecord
         $this->setResponse($response->getResponse());
     }
 
+    /**
+     * @param string $response
+     */
     public function setResponse($response)
     {
         if (!is_string($response)) {

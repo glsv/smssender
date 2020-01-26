@@ -29,7 +29,7 @@ class SmsLogGridView extends GridView
         $this->columns = [
             [
                 'attribute' => 'date_create',
-                'label' => 'Дата',
+                'label' => \Yii::t('sms-sender/app', 'created_at'),
                 'options' => ['style' => 'width: 120px'],
                 'format' => 'raw',
                 'value' => function(SmsLog $model) {
@@ -38,17 +38,19 @@ class SmsLogGridView extends GridView
             ],
             [
                 'attribute' => 'phone',
-                'label' => 'Номер',
+                'label' => \Yii::t('sms-sender/app', 'phone'),
                 'options' => [
                     'style' => 'width: 100px',
                 ],
             ],
             [
                 'attribute' => 'message',
+                'label' => \Yii::t('sms-sender/app', 'message'),
                 'filter' => false,
             ],
             [
                 'attribute' => 'operation_status',
+                'label' => \Yii::t('sms-sender/app', 'operation_status'),
                 'filter' => OperationStatus::$statuses,
                 'contentOptions' => function(SmsLog $model) {
                     $class = '';
@@ -67,6 +69,7 @@ class SmsLogGridView extends GridView
             ],
             [
                 'attribute' => 'message_status',
+                'label' => \Yii::t('sms-sender/app', 'message_status'),
                 'filter' => MessageStatus::$statuses,
                 'contentOptions' => function(SmsLog $model) {
                     $class = '';
@@ -85,7 +88,7 @@ class SmsLogGridView extends GridView
             ],
             [
                 'attribute' => 'recipient_name',
-                'label' => 'ФИО',
+                'label' => \Yii::t('sms-sender/app', 'recipient'),
                 'format' => 'raw',
                 'value' => function ($model) {
                     if ($model->recipient_id && $this->recipientUrlBuilder) {

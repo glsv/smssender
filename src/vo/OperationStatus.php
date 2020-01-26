@@ -2,6 +2,8 @@
 
 namespace glsv\smssender\vo;
 
+use Yii;
+
 class OperationStatus
 {
     CONST STATUS_SUCCESS = 'success';
@@ -9,9 +11,9 @@ class OperationStatus
     CONST STATUS_DEBUG = 'debug';
 
     public static $statuses = [
-        self::STATUS_SUCCESS => 'Выполнено',
-        self::STATUS_ERROR => 'Ошибка',
-        self::STATUS_DEBUG => 'Debug',
+        self::STATUS_SUCCESS => 'performed',
+        self::STATUS_ERROR => 'error',
+        self::STATUS_DEBUG => 'debug',
     ];
 
     private $status;
@@ -38,6 +40,6 @@ class OperationStatus
      */
     public function getLabel()
     {
-        return self::$statuses[$this->status];
+        return Yii::t('sms-sender/statuses', self::$statuses[$this->status]);
     }
 }
