@@ -137,7 +137,7 @@ class SmsSender implements SmsSenderInterface
             'operation_status' => $operation_status,
         ]);
 
-        $log->setDataFromSendResponse($response);
+        $log->initBySendResponse($response);
 
         if ($recipient) {
             $log->setRecipient($recipient);
