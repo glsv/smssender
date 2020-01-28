@@ -18,7 +18,7 @@ interface SmsProviderInterface
     public function send($number, $message, \DateTimeInterface $dateSend = null);
 
     /**
-     * @param $id
+     * @param int|string $id
      * @return SendResponseInterface
      */
     public function getInfoMessage($id);
