@@ -2,9 +2,10 @@
 
 namespace glsv\smssender\widgets;
 
-use glsv\smssender\interfaces\RecipientUrlBuilder;
+use yii\base\InvalidConfigException;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use glsv\smssender\interfaces\RecipientUrlBuilder;
 use glsv\smssender\SmsLog;
 use glsv\smssender\vo\OperationStatus;
 use glsv\smssender\vo\MessageStatus;
@@ -23,7 +24,7 @@ class SmsLogGridView extends GridView
     public function init()
     {
         if ($this->recipientUrlBuilder && !($this->recipientUrlBuilder instanceof RecipientUrlBuilder)) {
-            throw new \InvalidArgumentException('Не верный тип recipientUrlBuilder.');
+            throw new InvalidConfigException('The "recipientUrlBuilder" property must have a RecipientUrlBuilder type.');
         }
 
         $this->columns = [

@@ -11,11 +11,11 @@ class ErrorSendResponse implements SendResponseInterface
     public function __construct($message)
     {
         if (!is_string($message)) {
-            throw new \InvalidArgumentException('Сообщение должно быть строкой.');
+            throw new \InvalidArgumentException('The message must be a string type.');
         }
 
         if (empty($message)) {
-            throw new \InvalidArgumentException('Пустое сообщение.');
+            throw new \InvalidArgumentException('The message can`t be empty.');
         }
 
         $this->message = $message;

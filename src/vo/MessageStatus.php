@@ -32,7 +32,7 @@ class MessageStatus implements MessageStatusInterface
     public function __construct($status)
     {
         if (!in_array($status, array_keys(self::$statuses))) {
-            throw new \InvalidArgumentException('Ошибка статуса (' . $status . ') ' . self::class);
+            throw new \InvalidArgumentException('Status is wrong (' . $status . ') in a ' . self::class);
         }
 
         $this->status = $status;

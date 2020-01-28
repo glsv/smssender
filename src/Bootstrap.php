@@ -14,6 +14,7 @@ class Bootstrap implements BootstrapInterface
             'fileMap' => [
                 'sms-sender/app' => 'app.php',
                 'sms-sender/statuses' => 'statuses.php',
+                'sms-sender/messages' => 'messages.php',
             ]
         ];
     }

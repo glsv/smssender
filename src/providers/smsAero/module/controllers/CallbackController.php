@@ -5,7 +5,6 @@ namespace glsv\smssender\providers\smsAero\module\controllers;
 use glsv\smssender\exceptions\EntityNotFoundException;
 use glsv\smssender\interfaces\SmsSenderInterface;
 use glsv\smssender\services\SmsLogService;
-use glsv\smssender\SmsSender;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -19,7 +18,7 @@ class CallbackController extends Controller
     private $service;
 
     /**
-     * @var SmsSender
+     * @var SmsSenderInterface
      */
     private $sender;
 
@@ -35,14 +34,14 @@ class CallbackController extends Controller
         $post = \Yii::$app->request->post();
 
         if (!isset($post['id']) || !isset($post['status'])) {
-            throw new \InvalidArgumentException('Нет параметров id или status');
+            throw new \InvalidArgumentException('The "id" or "status" parameters don`t defined in a request.');
         }
 
         try {
             $this->service->updateMessageStatus($this->sender->getCurrentProviderKey(), $post['id'], $post['status']);
         } catch (EntityNotFoundException $exc) {
             \Yii::$app->errorHandler->logException($exc);
-            throw new NotFoundHttpException('Сообщение не найдено по message_id');
+            throw new NotFoundHttpException('The message was not found by message_id.');
         }
 
         return [];

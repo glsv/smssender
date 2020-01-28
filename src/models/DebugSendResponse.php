@@ -27,7 +27,7 @@ class DebugSendResponse implements SendResponseInterface
      */
     public function getResponse()
     {
-        return 'Debug режим';
+        return 'Debug mode';
     }
 
     /**

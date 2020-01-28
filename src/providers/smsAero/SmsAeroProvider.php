@@ -28,21 +28,25 @@ class SmsAeroProvider implements SmsProviderInterface
      */
     private $api;
 
+    /**
+     * SmsAeroProvider constructor.
+     * @param array $config
+     */
     public function __construct($config = [])
     {
         if (empty($config)) {
-            throw new \InvalidArgumentException('Конфиг не может быть пустым.');
+            throw new \InvalidArgumentException('The config param can`t be empty.');
         }
 
         if (!is_array($config)) {
-            throw new \InvalidArgumentException('Конфиг должен быть массивом.');
+            throw new \InvalidArgumentException('The config must be an array.');
         }
 
         $required_fields = ['user', 'api_key'];
 
         foreach ($required_fields as $param) {
             if (!isset($config[$param])) {
-                throw new \InvalidArgumentException('Не указан параметр ' . $param . '.');
+                throw new \InvalidArgumentException($param . ' parameter doesn`t defined in the config.');
             }
         }
 
@@ -94,18 +98,18 @@ class SmsAeroProvider implements SmsProviderInterface
     private function validateResponse($response = [])
     {
         if (empty($response)) {
-            throw new ValidateResponseException('Пустой массив вместо ответа.');
+            throw new ValidateResponseException('Response can`t be empty.');
         }
 
         if (!is_array($response)) {
-            throw new ValidateResponseException('Ответ должент быть массивом.');
+            throw new ValidateResponseException('Answer must be an array.');
         }
 
         $fields = ['success', 'data', 'message'];
 
         foreach ($fields as $field) {
             if (!array_key_exists($field, $response)) {
-                throw new ValidateResponseException('В ответе отсутствует ' . $field);
+                throw new ValidateResponseException($field . ' field was not found in the response.');
             }
         }
     }
@@ -126,7 +130,7 @@ class SmsAeroProvider implements SmsProviderInterface
     }
 
     /**
-     * @param $id
+     * @param int|string $id
      * @return SendResponseInterface
      */
     public function getInfoMessage($id)
@@ -138,7 +142,7 @@ class SmsAeroProvider implements SmsProviderInterface
     }
 
     /**
-     * @return double
+     * @return string
      */
     public function getBalance()
     {
@@ -146,11 +150,15 @@ class SmsAeroProvider implements SmsProviderInterface
         $this->validateResponse($response);
 
         if (!$response['success']) {
-            throw new ValidateResponseException('Ошибка запроса баланса: ' . $response['message']);
+            throw new ValidateResponseException(
+                \Yii::t('sms-sender/messages', 'Error checking a balance.') . $response['message']
+            );
         }
 
         if (!isset($response['data']['balance'])) {
-            throw new ValidateResponseException('Ответ от сервера на запрос баланса не соответствует API.');
+            throw new ValidateResponseException(
+                \Yii::t('sms-sender/messages', 'Server response does not correspond to API.')
+            );
         }
 
         return $response['data']['balance'];

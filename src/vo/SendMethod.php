@@ -17,7 +17,7 @@ class SendMethod
     public function __construct($method)
     {
         if (in_array($method, self::$methods)) {
-            throw new \InvalidArgumentException('Метод отправки не верен: ' . $method);
+            throw new \InvalidArgumentException('Method is wrong: ' . $method);
         }
 
         $this->method = $method;

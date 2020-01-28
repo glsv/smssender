@@ -21,7 +21,7 @@ class SendSimpleFormAction extends BaseSmsSenderAction
         parent::init();
 
         if (empty($this->formViewName)) {
-            throw new \InvalidArgumentException('viewName не может быть пустым.');
+            throw new \InvalidArgumentException('formViewName can`t be empty.');
         }
     }
 
@@ -38,7 +38,7 @@ class SendSimpleFormAction extends BaseSmsSenderAction
 
             try {
                 $this->sender->send($form->number, $form->message, SendMethod::METHOD_MANUAL, null, $recipient);
-                \Yii::$app->session->addFlash('success', 'Сообщение успешно отправлено');
+                \Yii::$app->session->addFlash('success', \Yii::t('sms-sender/messages', 'The message was successfully sent.'));
 
                 if (!empty($this->smsViewName) && $smsLog = $this->sender->getLastSmsLog()) {
                     return $this->controller->redirect([$this->smsViewName, 'id' => $smsLog->id]);

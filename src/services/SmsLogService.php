@@ -6,8 +6,8 @@ use glsv\smssender\exceptions\EntityNotFoundException;
 use glsv\smssender\forms\SmsLogSearch;
 use glsv\smssender\providers\smsAero\SmsAeroMessageStatus;
 use glsv\smssender\SmsLog;
-use RuntimeException;
 use yii\data\ActiveDataProvider;
+use RuntimeException;
 
 class SmsLogService
 {
@@ -18,7 +18,7 @@ class SmsLogService
     public function get($id)
     {
         if (!$model = SmsLog::findOne($id)) {
-            throw new EntityNotFoundException('Модель smsLog не найдена по ID: ' . $id);
+            throw new EntityNotFoundException('SmsLog model was not found by id: ' . $id);
         }
 
         return $model;
@@ -37,7 +37,7 @@ class SmsLogService
         $model = SmsLog::find()->andWhere(['provider_key' => $provider_key, 'message_id' => $message_id])->one();
 
         if (!$model) {
-            throw new EntityNotFoundException('Модель smsLog не найдена по message_id: ' . $message_id);
+            throw new EntityNotFoundException('SmsLog model was not found by message_id: ' . $message_id);
         }
 
         return $model;
@@ -104,7 +104,7 @@ class SmsLogService
     public function save(SmsLog &$model)
     {
         if (!$model->save()) {
-            throw new RuntimeException('Ошибка сохранения логов: ' . implode(', ', $model->getFirstErrors()));
+            throw new RuntimeException('An error occurred while saving the SmsLog: ' . implode(', ', $model->getFirstErrors()));
         }
     }
 }

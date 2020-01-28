@@ -44,14 +44,14 @@ class SmsAeroSendResponse implements SendResponseInterface
     public function __construct($response)
     {
         if (!is_array($response)) {
-            throw new \InvalidArgumentException('response должен быть массивом.');
+            throw new \InvalidArgumentException('"response" value must be an array.');
         }
 
         $required = ['id', 'number', 'status', 'dateSend'];
 
         foreach ($required as $field) {
             if (!array_key_exists($field, $response)) {
-                throw new ValidateResponseException('Не найдено поле ' . $field);
+                throw new ValidateResponseException($field . ' value doesn`t found in the "response".');
             }
         }
 

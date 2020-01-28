@@ -39,9 +39,15 @@ class UpdateStatusAction extends BaseSmsSenderAction
             $model->initBySendResponse($response);
             $this->service->save($model);
 
-            \Yii::$app->session->addFlash('success', 'Лог сообщения обновлен.');
+            \Yii::$app->session->addFlash(
+                'success',
+                \Yii::t('sms-sender/messages', 'The log of sms message was updated.')
+            );
         } catch (EntityNotFoundException $exc) {
-            \Yii::$app->session->addFlash('error', 'Запись не найдена по id: ' . $id);
+            \Yii::$app->session->addFlash(
+                'error',
+                \Yii::t('sms-sender/messages', 'The log item was not found by ID: {id}.', ['id' => $id])
+            );
         } catch (SmsSenderException $exc) {
             \Yii::$app->errorHandler->logException($exc);
             \Yii::$app->session->addFlash('error', $exc->getMessage());

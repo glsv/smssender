@@ -48,7 +48,7 @@ class SmsAeroMessageStatus implements MessageStatusInterface, ProviderMessageSta
     public function __construct($code)
     {
         if (!in_array($code, array_keys(self::$statuses))) {
-            throw new \InvalidArgumentException('Код статуса не распознан: ' . $code);
+            throw new \InvalidArgumentException('Code status of message is wrong: ' . $code);
         }
 
         $this->code = $code;
@@ -76,7 +76,7 @@ class SmsAeroMessageStatus implements MessageStatusInterface, ProviderMessageSta
     public function getSenderStatus()
     {
         if (!isset(self::$map[$this->code])) {
-            throw new \DomainException('Не определен статус сообщения для статус провайдера: ' . $this->code);
+            throw new \DomainException('A provider code status doesn`t defined for code: ' . $this->code);
         }
 
         return self::$map[$this->code];

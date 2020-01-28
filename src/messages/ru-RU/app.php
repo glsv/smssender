@@ -9,5 +9,5 @@ return [
     'updated_at' => 'Дата обновления',
     '11 digits' => '11 цифр',
     'ID in the accounting system' => 'ID в учетной системе',
-    'Balance' => 'Баланс'
+    'Balance' => 'Баланс',
 ];
