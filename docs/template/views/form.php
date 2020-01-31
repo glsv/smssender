@@ -1,4 +1,7 @@
 <?php
+/**
+ * @var \glsv\smssender\SmsLog $model
+ */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;

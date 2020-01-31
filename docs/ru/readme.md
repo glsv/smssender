@@ -1,17 +1,17 @@
-# Интерфейс просмотра логов smsSender
+# Интерфейс просмотра логов
 Расширение не имеет готового интерфейса просмотра сохраняемых логов, 
-но содержит ряд компонентов из которых можно собрать контроллер с интерфейсом для работы с логами. 
+но содержит ряд компонентов из которых можно собрать контроллер с интерфейсом. 
 Сам интерфейс (view-файлы) нужно реализовать самостоятельно.
 
-**Пример контроллера** 
+### Контроллер
+Пример реализации контроллера. Реализует следующую функциональность: 
+- Cписок логов через ActiveDataProvider (index action)
+- Просмотр одной записи лога (view action)
+- Обновить статус лога через запрос к sms-провайдеру (update-status action)
+- Проверка баланса sms-провайдера (check-balance action)
+- Форма и отправка sms-сообщение (form action)
+  
 ```
-use glsv\smssender\actions\CheckBalanceAction;
-use glsv\smssender\actions\SendSimpleFormAction;
-use glsv\smssender\actions\UpdateStatusAction;
-use glsv\smssender\forms\SmsLogSearch;
-use glsv\smssender\interfaces\SmsSenderInterface;
-use glsv\smssender\services\SmsLogService;
-
 class SmsLogController extends Controller
 {
     /**
@@ -51,7 +51,6 @@ class SmsLogController extends Controller
 
     /**
      * Список sms-логов через DataProvider и GridView
-     * @return string
      */
     public function actionIndex()
     {
@@ -70,6 +69,9 @@ class SmsLogController extends Controller
         ]);
     }
 
+    /**
+     * Просмотр записи лога
+     */
     public function actionView($id)
     {
         $model = $this->service->get($id);
@@ -78,5 +80,22 @@ class SmsLogController extends Controller
 }
 ```
 
-## Шаблоны
+### GridView
+Для отображения списка логов предназначен `glsv\smssender\widgets\SmsLogGridView`.
+Он наследуется от стандартного `yii\grid\GridView` с уже настроенными колонками 
+и дополнительными параметрами.
+```
+<?= SmsLogGridView::widget([
+    'dataProvider' => $dataProvider,
+    // 'recipientVisible' => false,
+    // 'recipientUrlBuilder' => new YourRecipientUrlBuilder(),
+]) ?
+```
+- `recipientVisible` - отключает отображение колонки с именем получателя. 
+Опция нужна когда список sms отображается на странице самого получателя в админ панели.
+- `recipientUrlBuilder` - модель наследованная от `glsv\smssender\interfaces\RecipientUrlBuilder`.
+Используется когда необходимо не только показать имя получателя, но и дать ссылку на его страницу.
+`RecipientUrlBuilder` должен реализовывать метод `getUrl($recipient_id)` 
+
+### Шаблоны
 Базовые шаблоны контроллера и views можно взять из [template](../template) 
