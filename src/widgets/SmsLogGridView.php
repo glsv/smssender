@@ -10,14 +10,33 @@ use glsv\smssender\SmsLog;
 use glsv\smssender\vo\OperationStatus;
 use glsv\smssender\vo\MessageStatus;
 
+/**
+ * Class SmsLogGridView
+ * @package glsv\smssender\widgets
+ *
+ * GridView для отображения списка логов
+ *
+ * Использование подобно обычному GridView:
+ * ```php
+ * <?= SmsLogGridView::widget([
+ *     'dataProvider' => $dataProvider,
+ * ]) ?
+ * ```
+ */
 class SmsLogGridView extends GridView
 {
+    /**
+     * @var bool Show a recipient column or not
+     */
     public $recipientVisible = true;
+
+    /**
+     * @var string
+     */
     public $smsControllerId = 'sms-log';
 
     /**
-     * Helper для генерации URL к сущности получателя
-     * @var RecipientUrlBuilder
+     * @var RecipientUrlBuilder The helper for generation an URL to the recipient entity
      */
     public $recipientUrlBuilder;
 
