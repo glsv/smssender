@@ -4,6 +4,7 @@ namespace glsv\smssender\providers\smsAero;
 
 use glsv\smssender\exceptions\ValidateResponseException;
 use glsv\smssender\interfaces\SendResponseInterface;
+use glsv\smssender\providers\smsAero\SmsAeroMessageStatus;
 
 /**
  * Class SmsAeroResponse
@@ -38,6 +39,11 @@ class SmsAeroSendResponse implements SendResponseInterface
     private $raw_response;
 
     /**
+     * @var SmsAeroMessageStatus
+     */
+    private $statusModel;
+
+    /**
      * SmsAeroResponse constructor.
      * @param $response
      */
@@ -61,6 +67,7 @@ class SmsAeroSendResponse implements SendResponseInterface
             }
         }
 
+        $this->statusModel = new SmsAeroMessageStatus($this->status);
         $this->raw_response = $response;
     }
 
@@ -77,8 +84,7 @@ class SmsAeroSendResponse implements SendResponseInterface
      */
     public function getMessageStatus()
     {
-        $status = new SmsAeroMessageStatus($this->status);
-        return $status->getSenderStatus();
+        return $this->statusModel->getSenderStatus();
     }
 
     /**
@@ -90,19 +96,18 @@ class SmsAeroSendResponse implements SendResponseInterface
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isFakeResponse()
+    public function getProviderStatus()
     {
-        return false;
+        return (string)$this->statusModel->getStatus();
     }
 
     /**
      * @return string
      */
-    public function getProviderStatus()
+    public function getProviderStatusLabel()
     {
-        $status = new SmsAeroMessageStatus($this->status);
-        return (string)$status->getStatus();
+        return $this->statusModel->getLabel();
     }
 }

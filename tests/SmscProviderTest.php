@@ -2,86 +2,50 @@
 
 use PHPUnit\Framework\TestCase;
 use glsv\smssender\exceptions\ValidateException;
-use glsv\smssender\providers\smsAero\SmsAeroProvider;
+use glsv\smssender\providers\smsc\SmscProvider;
 use glsv\smssender\interfaces\SendResponseInterface;
 use glsv\smssender\interfaces\SmsLogModelInterface;
-use evgenyy33\smsaerov2\SmsaeroApiV2;
+use glsv\smssender\providers\smsc\api\SmscApi;
 
-class SmsAeroProviderTest extends TestCase
+class SmscProviderTest extends TestCase
 {
     /**
-     * @var SmsAeroProvider
+     * @var SmscProvider
      */
     private $provider;
 
-    private $phone = '79200001122';
+    private $phone = '7920001122';
 
     protected function setUp()
     {
         $config = [
-            'user' => 'user',
-            'api_key' => 'api_key',
-            'debug_mode' => true,
+            'login' => 'login',
+            'psw' => 'password',
         ];
 
-        $provider = new SmsAeroProvider($config);
+        $provider = new SmscProvider($config);
 
         /**
          * Меняем api провайдера на stub
          */
-        $api = $this->createMock(SmsaeroApiV2::class);
+        $api = $this->createMock(SmscApi::class);
+        $api->method('send')->willReturn(json_encode(['id' => 1, 'cnt' => '1']));
 
-        $send_data = [
-            'success' => true,
-            'message' => '',
-            'data' => [
-                'id' => 0123456,
-                'from' => 'NAME',
-                'number' => '79040123344',
-                'text' => 'message text',
-                'status' => 8,
-                'extendStatus' => 'moderation',
-                'channel' => 'DIRECT',
-                'cost' => 2.69,
-                'dateCreate' => time(),
-                'dateSend' => time(),
-            ],
-        ];
+        $last_timestamp = time();
 
-        $api->method('send')->willReturn($send_data);
-        $api->method('test_send')->willReturn($send_data);
+        $api->method('getStatus')->willReturn(json_encode([
+            'status' => 1,
+            'last_date' => date('d.m.Y H:i:s', $last_timestamp),
+            'last_timestamp' => $last_timestamp
+        ]));
 
-        $api->method('check_send')->willReturn([
-            'success' => true,
-            'message' => '',
-            'data' => [
-                'id' => 0123456,
-                'from' => 'NAME',
-                'number' => '79040123344',
-                'text' => 'message text',
-                'status' => 8,
-                'extendStatus' => 'moderation',
-                'channel' => 'DIRECT',
-                'cost' => 2.69,
-                'dateCreate' => time(),
-                'dateSend' => time(),
-            ]
-        ]);
-
-        $api->method('balance')->willReturn([
-            'success' => true,
-            'message' => '',
-            'data' => [
-                'balance' => 10.15,
-            ],
-        ]);
+        $api->method('getBalance')->willReturn(json_encode(['balance' => 20.01]));
 
         $refObj = new ReflectionClass($provider);
 
         $property = $refObj->getProperty('api');
         $property->setAccessible(true);
         $property->setValue($provider, $api);
-
 
         $this->provider = $provider;
     }

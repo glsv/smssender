@@ -3,6 +3,7 @@
 namespace glsv\smssender\models;
 
 use glsv\smssender\interfaces\SendResponseInterface;
+use glsv\smssender\vo\MessageStatus;
 
 class DebugSendResponse implements SendResponseInterface
 {
@@ -11,7 +12,7 @@ class DebugSendResponse implements SendResponseInterface
      */
     public function getMessageId()
     {
-        return null;
+        return 1;
     }
 
     /**
@@ -31,18 +32,18 @@ class DebugSendResponse implements SendResponseInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isFakeResponse()
-    {
-        return true;
-    }
-
-    /**
      * @return string|null
      */
     public function getProviderStatus()
     {
-        return null;
+        return MessageStatus::STATUS_DEBUG;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProviderStatusLabel()
+    {
+        return 'debug';
     }
 }

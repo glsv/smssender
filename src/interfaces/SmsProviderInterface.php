@@ -18,10 +18,10 @@ interface SmsProviderInterface
     public function send($number, $message, \DateTimeInterface $dateSend = null);
 
     /**
-     * @param int|string $id
+     * @param SmsLogModelInterface $model
      * @return SendResponseInterface
      */
-    public function getInfoMessage($id);
+    public function getInfoMessage(SmsLogModelInterface $model);
 
     /**
      * @return string

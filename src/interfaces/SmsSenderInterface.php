@@ -4,6 +4,7 @@ namespace glsv\smssender\interfaces;
 
 use glsv\smssender\SmsLog;
 use glsv\smssender\models\Recipient;
+use glsv\smssender\interfaces\SmsFormInterface;
 use \DateTimeInterface;
 
 interface SmsSenderInterface
@@ -19,10 +20,16 @@ interface SmsSenderInterface
     public function send($number, $message, $method, DateTimeInterface $dateSend = null, Recipient $recipient = null);
 
     /**
-     * @param $message_id
+     * @param SmsFormInterface $form
      * @return SendResponseInterface
      */
-    public function getInfoMessage($message_id);
+    public function sendByForm(SmsFormInterface $form);
+
+    /**
+     * @param SmsLogModelInterface $model
+     * @return SendResponseInterface
+     */
+    public function getInfoMessage(SmsLogModelInterface $model);
 
     /**
      * @return string
@@ -38,12 +45,6 @@ interface SmsSenderInterface
      * @return false|SmsLog
      */
     public function getLastSmsLog();
-
-    /**
-     * @param SmsFormInterface $form
-     * @return SendResponseInterface
-     */
-    public function sendByForm(SmsFormInterface $form);
 
     /**
      * @return void

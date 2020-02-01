@@ -5,11 +5,6 @@ namespace glsv\smssender\interfaces;
 interface SendResponseInterface
 {
     /**
-     * @return bool
-     */
-    public function isFakeResponse();
-
-    /**
      * @return int
      */
     public function getMessageId();
@@ -23,6 +18,11 @@ interface SendResponseInterface
      * @return string
      */
     public function getProviderStatus();
+
+    /**
+     * @return string
+     */
+    public function getProviderStatusLabel();
 
     /**
      * @return array

@@ -3,6 +3,7 @@
 namespace glsv\smssender;
 
 use glsv\smssender\interfaces\SmsFormInterface;
+use glsv\smssender\interfaces\SmsLogModelInterface;
 use glsv\smssender\interfaces\SmsSenderInterface;
 use glsv\smssender\interfaces\SendResponseInterface;
 use glsv\smssender\interfaces\SmsProviderInterface;
@@ -148,12 +149,12 @@ class SmsSender implements SmsSenderInterface
     }
 
     /**
-     * @param int|string $message_id
-     * @return SendResponseInterface
+     * @param \glsv\smssender\interfaces\SmsLogModelInterface $model
+     * @return \glsv\smssender\interfaces\SendResponseInterface
      */
-    public function getInfoMessage($message_id)
+    public function getInfoMessage(SmsLogModelInterface $model)
     {
-        $response = $this->provider->getInfoMessage($message_id);
+        $response = $this->provider->getInfoMessage($model);
         $this->validateSendResponse($response);
 
         return $response;

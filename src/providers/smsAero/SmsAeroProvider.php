@@ -2,8 +2,10 @@
 
 namespace glsv\smssender\providers\smsAero;
 
+use glsv\smssender\exceptions\ValidateException;
 use glsv\smssender\exceptions\ValidateResponseException;
 use glsv\smssender\exceptions\FailedCallServiceException;
+use glsv\smssender\interfaces\SmsLogModelInterface;
 use glsv\smssender\interfaces\SmsProviderInterface;
 use glsv\smssender\interfaces\SendResponseInterface;
 use evgenyy33\smsaerov2\SmsaeroApiV2;
@@ -75,6 +77,14 @@ class SmsAeroProvider implements SmsProviderInterface
      */
     public function send($number, $message, \DateTimeInterface $dateSend = null)
     {
+        if (empty($number)) {
+            throw new ValidateException('The "number" can`t be empty.');
+        }
+
+        if (empty($message)) {
+            throw new ValidateException('The "messaage" can`t be empty.');
+        }
+
         if ($dateSend) {
             $date_send = $dateSend->getTimestamp();
         } else {
@@ -133,9 +143,9 @@ class SmsAeroProvider implements SmsProviderInterface
      * @param int|string $id
      * @return SendResponseInterface
      */
-    public function getInfoMessage($id)
+    public function getInfoMessage(SmsLogModelInterface $model)
     {
-        $answer = $this->api->check_send($id);
+        $answer = $this->api->check_send($model->getMessageId());
         $result = $this->getResponseModel($answer);
 
         return $result;

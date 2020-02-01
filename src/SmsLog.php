@@ -2,6 +2,7 @@
 
 namespace glsv\smssender;
 
+use glsv\smssender\interfaces\SmsLogModelInterface;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use glsv\smssender\interfaces\SendResponseInterface;
@@ -29,7 +30,7 @@ use glsv\smssender\vo\MessageStatus;
  * @property int $created_at
  * @property int $updated_at
  */
-class SmsLog extends ActiveRecord
+class SmsLog extends ActiveRecord implements SmsLogModelInterface
 {
     private $max_length_message = 255;
     private $max_length_recipient = 255;
@@ -210,5 +211,18 @@ class SmsLog extends ActiveRecord
     public function getOperationStatusModel()
     {
         return new OperationStatus($this->operation_status);
+    }
+
+    public function getMessageId()
+    {
+        return $this->message_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
 }
