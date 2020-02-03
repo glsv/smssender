@@ -34,7 +34,7 @@ class UpdateStatusAction extends BaseSmsSenderAction
     {
         try {
             $model = $this->service->get($id);
-            $response = $this->sender->getInfoMessage($model->message_id);
+            $response = $this->sender->getInfoMessage($model);
 
             $model->initBySendResponse($response);
             $this->service->save($model);
