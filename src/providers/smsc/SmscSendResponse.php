@@ -4,6 +4,16 @@ namespace glsv\smssender\providers\smsc;
 
 use glsv\smssender\interfaces\SendResponseInterface;
 
+/**
+ * Class SmscSendResponse
+ * @package glsv\smssender\providers\smsc
+ *
+ * Ответ smsc.ru при успешной отправке (cost = 0, fmt = 3)
+ * {
+ *   "id": <id>,
+ *   "cnt": <n>
+ * }
+ */
 class SmscSendResponse implements SendResponseInterface
 {
     /**
