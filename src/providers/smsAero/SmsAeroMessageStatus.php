@@ -2,11 +2,10 @@
 
 namespace glsv\smssender\providers\smsAero;
 
-use glsv\smssender\interfaces\MessageStatusInterface;
 use glsv\smssender\interfaces\ProviderMessageStatusInterface;
 use glsv\smssender\vo\MessageStatus;
 
-class SmsAeroMessageStatus implements MessageStatusInterface, ProviderMessageStatusInterface
+class SmsAeroMessageStatus implements ProviderMessageStatusInterface
 {
     CONST STATUS_QUEUE = 0;
     CONST STATUS_DELIVERED = 1;

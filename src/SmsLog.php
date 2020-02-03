@@ -2,6 +2,7 @@
 
 namespace glsv\smssender;
 
+use glsv\smssender\interfaces\ProviderMessageStatusInterface;
 use glsv\smssender\interfaces\SmsLogModelInterface;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
@@ -24,9 +25,10 @@ use glsv\smssender\vo\MessageStatus;
  * @property string $last_response
  * @property string $message_status
  * @property string $provider_message_status
+ * @property string $provider_status_description
  * @property string $recipient_id
  * @property string $recipient_name
- * @property string $delivery_date
+ * @property int $delivered_at
  * @property int $created_at
  * @property int $updated_at
  */
@@ -54,8 +56,9 @@ class SmsLog extends ActiveRecord implements SmsLogModelInterface
             [['operation_status'], 'in', 'range' => array_keys(OperationStatus::$statuses)],
             [['message_status'], 'in', 'range' => array_keys(MessageStatus::$statuses)],
             [['provider_message_status'], 'string', 'max' => 50],
+            [['provider_status_description'], 'string', 'max' => 255],
             [['last_response'], 'string', 'max' => $this->max_length_response],
-            [['delivery_date'], 'date', 'format' => 'php:Y-m-d H:i:s']
+            [['delivered_at'], 'integer']
         ];
     }
 
@@ -136,32 +139,37 @@ class SmsLog extends ActiveRecord implements SmsLogModelInterface
         return 'SMS to ' . $this->phone . ' (' . date('d.m.Y', $this->created_at) .')';
     }
 
-    /**
-     * Установить статус сообщения (и общего MessageStatus и от провайдера)
-     * @param string $message_status
-     * @param string|null $provider_status
-     */
-    public function setMessageStatus($message_status, $provider_status = null)
+    public function successOperation()
     {
-        // Если статус сообщения известен, то значит операция выполнена
         $this->operation_status = OperationStatus::STATUS_SUCCESS;
-        $this->message_status = $message_status;
+    }
 
-        if ($provider_status) {
-            $this->provider_message_status = $provider_status;
+    /**
+     * Установить статус сообщения
+     * @param ProviderMessageStatusInterface $provider_status
+     */
+    public function setMessageStatus(ProviderMessageStatusInterface $providerStatus)
+    {
+        $this->message_status = $provider_status->getSenderStatus();
+        $this->provider_message_status = $provider_status->getStatus();
+        $this->provider_status_description = $provider_status->getLabel();
+
+        $statusModel = new MessageStatus($this->message_status);
+
+        if ($statusModel->isDelivered()) {
+            $this->delivered_at = time();
         }
     }
 
     /**
+     * Иницилизировать свойства по ответу от sms-провайдера
      * @param SendResponseInterface $response
      */
     public function initBySendResponse(SendResponseInterface $response)
     {
-        $this->message_status = $response->getMessageStatus();
-        $this->provider_message_status = $response->getProviderStatus();
-
         $this->setMessageId($response->getMessageId());
         $this->setResponse($response->getResponse());
+        $this->setMessageStatus($response->getProviderStatus());
     }
 
     /**

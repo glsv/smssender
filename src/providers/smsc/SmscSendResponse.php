@@ -2,6 +2,7 @@
 
 namespace glsv\smssender\providers\smsc;
 
+use glsv\smssender\interfaces\ProviderMessageStatusInterface;
 use glsv\smssender\interfaces\SendResponseInterface;
 
 /**
@@ -55,27 +56,11 @@ class SmscSendResponse implements SendResponseInterface
     }
 
     /**
-     * @return string
+     * @return ProviderMessageStatusInterface
      */
-    public function getMessageStatus()
+    public function getProviderStatus(): ProviderMessageStatusInterface
     {
-        $this->statusModel->getSenderStatus();
-    }
-
-    /**
-     * @return string
-     */
-    public function getProviderStatus()
-    {
-        $this->statusModel->getStatus();
-    }
-
-    /**
-     * @return string
-     */
-    public function getProviderStatusLabel()
-    {
-        $this->statusModel->getLabel();
+        return $this->statusModel;
     }
 
     /**
@@ -84,5 +69,14 @@ class SmscSendResponse implements SendResponseInterface
     public function getResponse()
     {
         return $this->raw_response;
+    }
+
+    /**
+     * @return int timestamp
+     * В ответе нет времени, поэтому возвращаем текущее
+     */
+    public function getDateLastChangeStatus()
+    {
+        return time();
     }
 }

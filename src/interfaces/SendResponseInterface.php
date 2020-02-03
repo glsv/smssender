@@ -10,22 +10,17 @@ interface SendResponseInterface
     public function getMessageId();
 
     /**
-     * @return string
+     * @return ProviderMessageStatusInterface
      */
-    public function getMessageStatus();
-
-    /**
-     * @return string
-     */
-    public function getProviderStatus();
-
-    /**
-     * @return string
-     */
-    public function getProviderStatusLabel();
+    public function getProviderStatus(): ProviderMessageStatusInterface;
 
     /**
      * @return array
      */
     public function getResponse();
+
+    /**
+     * @return int timestamp
+     */
+    public function getDateLastChangeStatus();
 }

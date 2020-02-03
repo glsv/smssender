@@ -46,14 +46,13 @@ class SmsLogService
     /**
      * @param string $provider_key
      * @param string|int $message_id
-     * @param int|string $provider_status
+     * @param ProviderMessageStatusInterface $provider_status
      */
-    public function updateMessageStatus($provider_key, $message_id, $provider_status)
+    public function updateMessageStatus($provider_key, $message_id, ProviderMessageStatusInterface $provider_status)
     {
         $model = $this->getByMessageId($provider_key, $message_id);
-
-        $providerStatus = new SmsAeroMessageStatus($provider_status);
-        $model->setMessageStatus($providerStatus->getSenderStatus(), $providerStatus->getStatus());
+        $model->successOperation();
+        $model->setMessageStatus($providerStatus);
 
         $this->save($model);
     }

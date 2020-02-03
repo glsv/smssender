@@ -3,6 +3,7 @@
 namespace glsv\smssender\providers\smsAero;
 
 use glsv\smssender\exceptions\ValidateResponseException;
+use glsv\smssender\interfaces\ProviderMessageStatusInterface;
 use glsv\smssender\interfaces\SendResponseInterface;
 use glsv\smssender\providers\smsAero\SmsAeroMessageStatus;
 
@@ -34,8 +35,12 @@ class SmsAeroSendResponse implements SendResponseInterface
     private $extendStatus;
     private $channel;
     private $cost;
+    // Дата создания (в формате unixtime)
     private $dateCreate;
+    // Дата отправки (в формате unixtime)
     private $dateSend;
+    // Дата получения конечного статуса сообщения (в формате unixtime)
+    private $dateAnswer;
     private $raw_response;
 
     /**
@@ -80,14 +85,6 @@ class SmsAeroSendResponse implements SendResponseInterface
     }
 
     /**
-     * @return string
-     */
-    public function getMessageStatus()
-    {
-        return $this->statusModel->getSenderStatus();
-    }
-
-    /**
      * @return array
      */
     public function getResponse()
@@ -96,18 +93,18 @@ class SmsAeroSendResponse implements SendResponseInterface
     }
 
     /**
-     * @return string
+     * @return ProviderMessageStatusInterface
      */
-    public function getProviderStatus()
+    public function getProviderStatus(): ProviderMessageStatusInterface
     {
-        return (string)$this->statusModel->getStatus();
+        return $this->statusModel;
     }
 
     /**
-     * @return string
+     * @return int timestamp
      */
-    public function getProviderStatusLabel()
+    public function getDateLastChangeStatus()
     {
-        return $this->statusModel->getLabel();
+        return $this->dateAnswer ?? $this->dateSend ?? time();
     }
 }

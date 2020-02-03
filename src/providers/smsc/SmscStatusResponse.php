@@ -2,6 +2,7 @@
 
 namespace glsv\smssender\providers\smsc;
 
+use glsv\smssender\interfaces\ProviderMessageStatusInterface;
 use glsv\smssender\interfaces\SendResponseInterface;
 
 class SmscStatusResponse implements SendResponseInterface
@@ -15,6 +16,11 @@ class SmscStatusResponse implements SendResponseInterface
      * @var int
      */
     private $status;
+
+    /**
+     * @var int
+     */
+    private $last_timestamp;
 
     /**
      * @var array
@@ -37,12 +43,17 @@ class SmscStatusResponse implements SendResponseInterface
             throw new \InvalidArgumentException('The "message_id" param must be a "int".');
         }
 
-        if (!isset($response['status'])) {
-            throw new \InvalidArgumentException('The "raw_response" param must contain a "status" value.');
+        $required = ['status', 'last_timestamp'];
+
+        foreach ($required as $attr) {
+            if (!isset($response[$attr])) {
+                throw new \InvalidArgumentException('The "response" param must contain a "' . $attr . '" value.');
+            }
         }
 
         $this->message_id = $message_id;
         $this->raw_response = $response;
+        $this->last_timestamp = $response['last_timestamp'];
         $this->status = $response['status'];
         $this->statusModel = new SmscMessageStatus($this->status);
     }
@@ -56,27 +67,11 @@ class SmscStatusResponse implements SendResponseInterface
     }
 
     /**
-     * @return string
+     * @return ProviderMessageStatusInterface
      */
-    public function getMessageStatus()
+    public function getProviderStatus(): ProviderMessageStatusInterface
     {
-        return $this->statusModel->getSenderStatus();
-    }
-
-    /**
-     * @return string
-     */
-    public function getProviderStatus()
-    {
-        $this->statusModel->getStatus();
-    }
-
-    /**
-     * @return string
-     */
-    public function getProviderStatusLabel()
-    {
-        $this->statusModel->getLabel();
+        return $this->statusModel;
     }
 
     /**
@@ -85,5 +80,13 @@ class SmscStatusResponse implements SendResponseInterface
     public function getResponse()
     {
         return $this->raw_response;
+    }
+
+    /**
+     * @return int timestamp
+     */
+    public function getDateLastChangeStatus()
+    {
+        return $this->last_timestamp ?? time();
     }
 }

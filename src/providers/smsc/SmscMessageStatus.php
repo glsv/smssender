@@ -2,11 +2,10 @@
 
 namespace glsv\smssender\providers\smsc;
 
-use glsv\smssender\interfaces\MessageStatusInterface;
 use glsv\smssender\interfaces\ProviderMessageStatusInterface;
 use glsv\smssender\vo\MessageStatus;
 
-class SmscMessageStatus implements MessageStatusInterface, ProviderMessageStatusInterface
+class SmscMessageStatus implements ProviderMessageStatusInterface
 {
     /**
      * Расшифровка статусов

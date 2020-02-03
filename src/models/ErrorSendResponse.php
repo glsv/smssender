@@ -3,6 +3,7 @@
 namespace glsv\smssender\models;
 
 use glsv\smssender\interfaces\SendResponseInterface;
+use glsv\smssender\interfaces\ProviderMessageStatusInterface;
 use glsv\smssender\vo\MessageStatus;
 
 class ErrorSendResponse implements SendResponseInterface
@@ -33,32 +34,16 @@ class ErrorSendResponse implements SendResponseInterface
     /**
      * @return string
      */
-    public function getMessageStatus()
-    {
-        return MessageStatus::STATUS_FAILED;
-    }
-
-    /**
-     * @return string
-     */
     public function getResponse()
     {
         return $this->message;
     }
 
     /**
-     * @return string|null
+     * @return ProviderMessageStatusInterface
      */
-    public function getProviderStatus()
+    public function getProviderStatus(): ProviderMessageStatusInterface
     {
-        return 'error';
-    }
-
-    /**
-     * @return string
-     */
-    public function getProviderStatusLabel()
-    {
-        return 'error';
+        return new ErrorMessageStatus();
     }
 }

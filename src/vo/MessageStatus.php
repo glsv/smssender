@@ -50,4 +50,12 @@ class MessageStatus implements MessageStatusInterface
     {
         return Yii::t('sms-sender/statuses', self::$statuses[$this->status]);
     }
+
+    /**
+     * @return bool
+     */
+    public function isDelivered()
+    {
+        return $this->status === self::STATUS_DELIVERED;
+    }
 }
