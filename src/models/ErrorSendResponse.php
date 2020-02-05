@@ -4,7 +4,6 @@ namespace glsv\smssender\models;
 
 use glsv\smssender\interfaces\SendResponseInterface;
 use glsv\smssender\interfaces\ProviderMessageStatusInterface;
-use glsv\smssender\vo\MessageStatus;
 
 class ErrorSendResponse implements SendResponseInterface
 {
@@ -42,8 +41,16 @@ class ErrorSendResponse implements SendResponseInterface
     /**
      * @return ProviderMessageStatusInterface
      */
-    public function getProviderStatus(): ProviderMessageStatusInterface
+    public function getProviderStatus()
     {
         return new ErrorMessageStatus();
+    }
+
+    /**
+     * @return int timestamp
+     */
+    public function getDateLastChangeStatus()
+    {
+        return time();
     }
 }

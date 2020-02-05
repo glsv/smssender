@@ -27,8 +27,16 @@ class DebugSendResponse implements SendResponseInterface
     /**
      * @return ProviderMessageStatusInterface
      */
-    public function getProviderStatus(): ProviderMessageStatusInterface
+    public function getProviderStatus()
     {
         return new DebugMessageStatus();
+    }
+
+    /**
+     * @return int timestamp
+     */
+    public function getDateLastChangeStatus()
+    {
+        return time();
     }
 }

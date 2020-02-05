@@ -58,7 +58,7 @@ class SmscSendResponse implements SendResponseInterface
     /**
      * @return ProviderMessageStatusInterface
      */
-    public function getProviderStatus(): ProviderMessageStatusInterface
+    public function getProviderStatus()
     {
         return $this->statusModel;
     }

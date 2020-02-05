@@ -12,7 +12,7 @@ interface SendResponseInterface
     /**
      * @return ProviderMessageStatusInterface
      */
-    public function getProviderStatus(): ProviderMessageStatusInterface;
+    public function getProviderStatus();
 
     /**
      * @return array

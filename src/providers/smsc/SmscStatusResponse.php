@@ -69,7 +69,7 @@ class SmscStatusResponse implements SendResponseInterface
     /**
      * @return ProviderMessageStatusInterface
      */
-    public function getProviderStatus(): ProviderMessageStatusInterface
+    public function getProviderStatus()
     {
         return $this->statusModel;
     }
@@ -87,6 +87,6 @@ class SmscStatusResponse implements SendResponseInterface
      */
     public function getDateLastChangeStatus()
     {
-        return $this->last_timestamp ?? time();
+        return !is_null($this->last_timestamp) ? $this->last_timestamp : time();
     }
 }

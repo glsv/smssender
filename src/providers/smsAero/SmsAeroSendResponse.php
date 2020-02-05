@@ -95,7 +95,7 @@ class SmsAeroSendResponse implements SendResponseInterface
     /**
      * @return ProviderMessageStatusInterface
      */
-    public function getProviderStatus(): ProviderMessageStatusInterface
+    public function getProviderStatus()
     {
         return $this->statusModel;
     }
@@ -105,6 +105,14 @@ class SmsAeroSendResponse implements SendResponseInterface
      */
     public function getDateLastChangeStatus()
     {
-        return $this->dateAnswer ?? $this->dateSend ?? time();
+        if ($this->dateAnswer) {
+            return $this->dateAnswer;
+        }
+
+        if ($this->dateSend) {
+            return $this->dateSend;
+        }
+
+        return time();
     }
 }
