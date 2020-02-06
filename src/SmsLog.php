@@ -233,4 +233,12 @@ class SmsLog extends ActiveRecord implements SmsLogModelInterface
     {
         return $this->phone;
     }
+
+    /**
+     * @return int
+     */
+    public function getDeliveredTimestamp()
+    {
+       return $this->delivered_at;
+    }
 }
