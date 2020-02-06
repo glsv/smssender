@@ -3,10 +3,10 @@
  * @var \glsv\smssender\SmsLog $model
  */
 
-use yii\bootstrap\Html;
-use yii\bootstrap\ActiveForm;
-use common\widgets\Alert;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
+use common\widgets\Alert;
 
 $this->title = $model;
 $this->params['headerTitle'] = 'SMS';
@@ -52,6 +52,12 @@ $cssStyleMessage = $model->isDelivered() ? 'bg-success' : ($model->isFailed() ? 
                         'contentOptions' => ['class' => $cssStyleMessage]
                     ],
                     [
+                        'label' => 'Доставлено',
+                        'visible' => $model->isDelivered(),
+                        'value' => $model->getDeliveredTimestamp(),
+                        'format' => 'datetime'
+                    ],
+                    [
                         'attribute' => 'created_at',
                         'label' => 'Создано',
                         'format' => 'datetime'
@@ -72,6 +78,10 @@ $cssStyleMessage = $model->isDelivered() ? 'bg-success' : ($model->isFailed() ? 
                     [
                         'attribute' => 'message_id',
                         'label' => 'ID сообщения',
+                    ],
+                    [
+                        'attribute' => 'provider_status_description',
+                        'label' => 'Статус у провайдера',
                     ],
                     [
                         'attribute' => 'updated_at',
