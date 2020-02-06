@@ -150,9 +150,9 @@ class SmsLog extends ActiveRecord implements SmsLogModelInterface
      */
     public function setMessageStatus(ProviderMessageStatusInterface $providerStatus)
     {
-        $this->message_status = $providerStatus->getSenderStatus();
-        $this->provider_message_status = $providerStatus->getStatus();
-        $this->provider_status_description = $providerStatus->getLabel();
+        $this->message_status = (string)$providerStatus->getSenderStatus();
+        $this->provider_message_status = (string)$providerStatus->getStatus();
+        $this->provider_status_description = (string)$providerStatus->getLabel();
 
         $statusModel = new MessageStatus($this->message_status);
 
