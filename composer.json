@@ -21,6 +21,7 @@
     "require": {
         "ext-json": "*",
         "ext-mbstring": "*",
+        "ext-curl": "*",
         "yiisoft/yii2": "~2.0.0",
         "33evgenyy33/yii2-smsaerov2": "dev-master"
     },

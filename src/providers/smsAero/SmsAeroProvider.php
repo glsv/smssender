@@ -53,7 +53,7 @@ class SmsAeroProvider implements SmsProviderInterface
         }
 
         foreach ($config as $field => $value) {
-            if (property_exists(static::class, $param)) {
+            if (property_exists(static::class, $field)) {
                 $this->$field = $value;
             }
         }
@@ -140,7 +140,7 @@ class SmsAeroProvider implements SmsProviderInterface
     }
 
     /**
-     * @param int|string $id
+     * @param SmsLogModelInterface $model
      * @return SendResponseInterface
      */
     public function getInfoMessage(SmsLogModelInterface $model)

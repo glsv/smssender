@@ -2,9 +2,9 @@
 
 namespace glsv\smssender\services;
 
+use glsv\smssender\interfaces\ProviderMessageStatusInterface;
 use glsv\smssender\exceptions\EntityNotFoundException;
 use glsv\smssender\forms\SmsLogSearch;
-use glsv\smssender\providers\smsAero\SmsAeroMessageStatus;
 use glsv\smssender\SmsLog;
 use yii\data\ActiveDataProvider;
 use RuntimeException;
@@ -46,9 +46,9 @@ class SmsLogService
     /**
      * @param string $provider_key
      * @param string|int $message_id
-     * @param ProviderMessageStatusInterface $provider_status
+     * @param ProviderMessageStatusInterface $providerStatus
      */
-    public function updateMessageStatus($provider_key, $message_id, ProviderMessageStatusInterface $provider_status)
+    public function updateMessageStatus($provider_key, $message_id, ProviderMessageStatusInterface $providerStatus)
     {
         $model = $this->getByMessageId($provider_key, $message_id);
         $model->successOperation();

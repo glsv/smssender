@@ -5,7 +5,6 @@ namespace glsv\smssender\providers\smsAero;
 use glsv\smssender\exceptions\ValidateResponseException;
 use glsv\smssender\interfaces\ProviderMessageStatusInterface;
 use glsv\smssender\interfaces\SendResponseInterface;
-use glsv\smssender\providers\smsAero\SmsAeroMessageStatus;
 
 /**
  * Class SmsAeroResponse

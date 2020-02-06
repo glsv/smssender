@@ -146,13 +146,13 @@ class SmsLog extends ActiveRecord implements SmsLogModelInterface
 
     /**
      * Установить статус сообщения
-     * @param ProviderMessageStatusInterface $provider_status
+     * @param ProviderMessageStatusInterface $providerStatus
      */
     public function setMessageStatus(ProviderMessageStatusInterface $providerStatus)
     {
-        $this->message_status = $provider_status->getSenderStatus();
-        $this->provider_message_status = $provider_status->getStatus();
-        $this->provider_status_description = $provider_status->getLabel();
+        $this->message_status = $providerStatus->getSenderStatus();
+        $this->provider_message_status = $providerStatus->getStatus();
+        $this->provider_status_description = $providerStatus->getLabel();
 
         $statusModel = new MessageStatus($this->message_status);
 
@@ -173,7 +173,7 @@ class SmsLog extends ActiveRecord implements SmsLogModelInterface
     }
 
     /**
-     * @param string $response
+     * @param string|array $response
      */
     public function setResponse($response)
     {
