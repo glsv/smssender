@@ -156,7 +156,7 @@ class SmsLog extends ActiveRecord implements SmsLogModelInterface
 
         $statusModel = new MessageStatus($this->message_status);
 
-        if ($statusModel->isDelivered()) {
+        if ($statusModel->isDelivered() && empty($this->delivered_at)) {
             $this->delivered_at = time();
         }
     }
