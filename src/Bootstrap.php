@@ -8,6 +8,13 @@ class Bootstrap implements BootstrapInterface
 {
     public function bootstrap($app)
     {
+        $app->controllerMap['migrate-sms'] = [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationNamespaces' => [
+                'glsv\smssender\migrations'
+            ],
+        ];
+
         $app->i18n->translations['sms-sender*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'basePath' => '@vendor/glsv/yii2-smssender/src/messages',
