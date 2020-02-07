@@ -1,5 +1,6 @@
 # SmsSender
-Компонент-обертка над провайдерами отправки SMS, с логированием в БД и хелперами для интерфейса просмотра логов.
+Компонент-обертка над провайдерами отправки SMS, с логированием в БД и хелперами для построения 
+интерфейса просмотра логов.
 
 Удобен для следущей ситуации: 
 * Осуществляется рассылка по большому числу получателей (подписчики, рекламодатели и т.п)
@@ -64,43 +65,24 @@ class BootstrapComponent implements BootstrapInterface
 ```
 
 #### <a name="setup3"></a> 3. Миграции
-Добавить миграции через _migrationNamespaces_ в _controllerMap_
+Выполнить миграции по команде 
 ```
-'controllerMap' => [
-    'migrate' => [
-        'class' => 'yii\console\controllers\MigrateController',
-        'migrationNamespaces' => [
-            'glsv\smssender\migrations'
-        ],
-    ],
-],
-```
-Стандартный вызов найдет миграции для sms по команде:
-```
-php yii migrate
+php yii migrate-sms
 ```
 
 #### <a name="setup4"></a> 4. Обработка callback sms-провайдера
-Если включено логирование sms и нужно обрабатывать callback от sms-провайдера, то 
+Если нужно обрабатывать callback от sms-провайдера, то 
 добавить модуль соответствующего провайдера в конфигурацию приложения.
+Например, для callback следующего формата:
 
 https://site.com/sms-aero/callback/update-status
+
+добавить:
 ```
 'modules' => [
     'sms-aero' => [
         'class' => 'glsv\smssender\providers\smsAero\module\Module',
         'controllerNamespace' => 'glsv\smssender\providers\smsAero\module\controllers',
-    ],
-],
-```
-
-Или добавить опцию "defaultRoute" для сокращенного URL:
-https://site.com/sms-aero/
-```
-'modules' => [
-    'sms-aero' => [
-        ...
-        'defaultRoute' => 'callback/update-status'
     ],
 ],
 ```
