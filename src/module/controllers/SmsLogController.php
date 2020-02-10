@@ -1,12 +1,16 @@
 <?php
+
+namespace glsv\smssender\module\controllers;
+
 use glsv\smssender\actions\CheckBalanceAction;
 use glsv\smssender\actions\SendSimpleFormAction;
 use glsv\smssender\actions\UpdateStatusAction;
 use glsv\smssender\forms\SmsLogSearch;
 use glsv\smssender\interfaces\SmsSenderInterface;
 use glsv\smssender\services\SmsLogService;
+use yii\web\Controller;
 
-class SmsLogController extends BackendController
+class SmsLogController extends Controller
 {
     /**
      * @var SmsLogService

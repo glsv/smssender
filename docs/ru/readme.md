@@ -1,15 +1,64 @@
 # Интерфейс просмотра логов
-Расширение не имеет готового интерфейса просмотра сохраняемых логов, 
-но содержит ряд компонентов из которых можно собрать контроллер с интерфейсом. 
-Сам интерфейс (view-файлы) нужно реализовать самостоятельно.
+Интерфейс просмотра сохраняемых логов sms-сообщений следует рассматрировать в качестве шаблона,
+который вы можете откорректировать под ваши потребности.
 
-### Контроллер
-Пример реализации контроллера. Реализует следующую функциональность: 
-- Cписок логов через ActiveDataProvider (index action)
-- Просмотр одной записи лога (view action)
-- Обновить статус лога через запрос к sms-провайдеру (update-status action)
-- Проверка баланса sms-провайдера (check-balance action)
-- Форма и отправка sms-сообщение (form action)
+### Базовый интерфейс
+Базовый интерфейс просмотра логов подключается через модуль в конфигурации приложения.
+```
+'modules' => [
+    'sms-sender' => [
+        'class' => 'glsv\smssender\module\Module',
+        'controllerNamespace' => 'glsv\smssender\module\controllers',
+        'defaultRoute' => 'sms-log/index'
+    ],
+]
+```
+В этом случае доступ будет по адресу: http://your-site.com/sms-sender/
+
+### Кастомизация интерфейса 
+
+Например, если необходимо запретить просмотр логов неавторизованным пользователям и 
+кастомизировать views, можно сделать следующим образом.
+
+На примере yii2-advanced и размещения интерфейса по адресу http://your-site.com/sms-log/
+
+1. Переместь файлы views в `backend\views\sms-log\` и откорректировать их под ваши потребности.
+2. В контроллер, наследованный от `glsv\smssender\module\controllers\SmsLogController`, 
+добавить фильтр контроля доступа.  
+
+```
+<?php
+
+namespace backend\controllers;
+
+use glsv\smssender\module\controllers\SmsLogController as BaseSmsLogController;
+use yii\filters\AccessControl;
+
+class SmsLogController extends BaseSmsLogController
+{
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+}
+```
+
+### Описание контроллера
+Базовый контроллер реализует следующую функциональность: 
+- Cписок логов через ActiveDataProvider (index action);
+- Просмотр одной записи лога (view action);
+- Обновить статус лога через запрос к sms-провайдеру (update-status action);
+- Проверка баланса sms-провайдера (check-balance action);
+- Форма и отправка sms-сообщение (form action).
   
 ```
 class SmsLogController extends Controller
@@ -96,6 +145,3 @@ class SmsLogController extends Controller
 - `recipientUrlBuilder` - модель наследованная от `glsv\smssender\interfaces\RecipientUrlBuilder`.
 Используется когда необходимо не только показать имя получателя, но и дать ссылку на его страницу.
 `RecipientUrlBuilder` должен реализовывать метод `getUrl($recipient_id)` 
-
-### Шаблоны
-Базовые шаблоны контроллера и views можно взять из [template](../template) 
