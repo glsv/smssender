@@ -13,7 +13,7 @@ class DebugSendResponse implements SendResponseInterface
      */
     public function getMessageId()
     {
-        return 1;
+        return null;
     }
 
     /**
